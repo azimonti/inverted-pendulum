@@ -119,7 +119,7 @@ void GLApp::onInit()
     xPosition = yPosition = -1;
     width                 = 1280;
     height                = 720;
-    windowTitle           = "2D Plane";
+    windowTitle           = "Pendulum";
     frameInit();
     engineWnd->onInit();
 }

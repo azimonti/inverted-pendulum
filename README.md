@@ -2,7 +2,6 @@
 
 Control feedback with linearization and neural network for an inverted pendulum (single and on a cart)
 
-
 ## Required Tools
 
 - Git
@@ -11,6 +10,11 @@ Control feedback with linearization and neural network for an inverted pendulum 
 - curl
 - Fortran
 - HDF5
+- OpenGL
+- GLEW
+- GLFW
+- Dear ImGui
+- implot
 
 ## Getting Started
 
@@ -55,4 +59,14 @@ Further update of the submodule can be done with the command:
   ./build/Release/pendulum
   ```
 
+## Screenshot 2 dimensional
 
+![Pendulum](screenshots/pendulum_2d.png)
+
+![Pendulum Cart](Screenshots/pendulum_cart_2d.png)
+
+## Screenshot 3 dimensional
+
+![Pendulum](screenshots/pendulum_3d.png)
+
+![Pendulum Cart](Screenshots/pendulum_cart_3d.png)
