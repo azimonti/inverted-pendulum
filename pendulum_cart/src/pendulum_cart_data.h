@@ -109,7 +109,7 @@ namespace nn
         // save overwriting
         const bool overwrite              = false;
         // save path
-        const std::string save_path       = "./build/archive/";
+        const std::string save_path       = "./";
         // save every n generations
         const size_t save_every           = 250;
     };

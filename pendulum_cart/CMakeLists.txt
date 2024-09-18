@@ -60,24 +60,33 @@ endif()
 if (MSVC)
     target_link_libraries( ${PROJECT_NAME} ${OPENGL_gl_LIBRARY} debug cpp_graphic_engined debug cpp_nnd optimized cpp_graphic_engine optimized cpp_nn glfw3 glew)
     macro(COPYDLL)
-        ADD_CUSTOM_COMMAND( TARGET ${PROJECT_NAME} POST_BUILD
+      if(CMAKE_BUILD_TYPE STREQUAL "Release")
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+          COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/../../Release/
           COMMAND ${CMAKE_COMMAND} -E copy
-          $<$<CONFIG:Release>:../../../externals/ma_libs/build/$<CONFIG>/cpp_alg_lapack.dll>
-          $<$<CONFIG:Debug>:../../../externals/ma_libs/build/$<CONFIG>/cpp_alg_lapackd.dll>
-          ${CMAKE_BINARY_DIR}/../../$<CONFIG>
-          )
-        ADD_CUSTOM_COMMAND( TARGET ${PROJECT_NAME} POST_BUILD
+          ${CMAKE_SOURCE_DIR}/externals/ma-libs/build/Release/cpp_alg_lapack.dll
+          ${CMAKE_BINARY_DIR}/../../Release/
           COMMAND ${CMAKE_COMMAND} -E copy
-          $<$<CONFIG:Release>:../../../externals/ma_libs/build/$<CONFIG>/cpp_nn.dll>
-          $<$<CONFIG:Debug>:../../../externals/ma_libs/build/$<CONFIG>/cpp_nnd.dll>
-          ${CMAKE_BINARY_DIR}/../../$<CONFIG>
+          ${CMAKE_SOURCE_DIR}/externals/ma-libs/build/Release/cpp_nn.dll
+          ${CMAKE_BINARY_DIR}/../../Release/
           )
-      endmacro()
-      cmake_language(CALL COPYDLL)
+      elseif(CMAKE_BUILD_TYPE STREQUAL "Debug")
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+          COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/../../Debug/
+          COMMAND ${CMAKE_COMMAND} -E copy
+          ${CMAKE_SOURCE_DIR}/externals/ma-libs/build/Debug/cpp_alg_lapackd.dll
+          ${CMAKE_BINARY_DIR}/../../Debug/
+          COMMAND ${CMAKE_COMMAND} -E copy
+          ${CMAKE_SOURCE_DIR}/externals/ma-libs/build/Debug/cpp_nnd.dll
+          ${CMAKE_BINARY_DIR}/../../Debug/
+          )
+      endif()
+    endmacro()
+    cmake_language(CALL COPYDLL)
 elseif(APPLE)
-    target_link_libraries( ${PROJECT_NAME} ${OPENGL_gl_LIBRARY} debug engined debug nnd optimized cpp_graphic_engine optimized cpp_nn libglfw.dylib glew "-framework Foundation -framework IOKit -framework Cocoa" )
+    target_link_libraries( ${PROJECT_NAME} ${OPENGL_gl_LIBRARY} debug engined debug cpp_nnd optimized cpp_graphic_engine optimized cpp_nn libglfw.dylib glew "-framework Foundation -framework IOKit -framework Cocoa" )
 else()
-    target_link_libraries( ${PROJECT_NAME} ${OPENGL_gl_LIBRARY} debug engined debug nnd optimized cpp_graphic_engine optimized cpp_nn libglfw.so libGLEW.so -ldl -lpthread -lGL -lGLU)
+    target_link_libraries( ${PROJECT_NAME} ${OPENGL_gl_LIBRARY} debug engined debug cpp_nnd optimized cpp_graphic_engine optimized cpp_nn libglfw.so libGLEW.so -ldl -lpthread -lGL -lGLU)
 endif()
 
 add_executable( ${PROJECT_NAME}_bin ./src/main2.cpp ${SRCS} )
@@ -87,11 +96,11 @@ if(UNITYBUILD)
 endif()
 
 if (MSVC)
-    target_link_libraries( ${PROJECT_NAME}_bin debug nnd optimized cpp_nn )
+    target_link_libraries( ${PROJECT_NAME}_bin debug cpp_nnd optimized cpp_nn )
 elseif(APPLE)
-    target_link_libraries( ${PROJECT_NAME}_bin debug nnd optimized cpp_nn )
+    target_link_libraries( ${PROJECT_NAME}_bin debug cpp_nnd optimized cpp_nn )
 else()
-    target_link_libraries( ${PROJECT_NAME}_bin debug nnd optimized cpp_nn )
+    target_link_libraries( ${PROJECT_NAME}_bin debug cpp_nnd optimized cpp_nn )
 endif()
 
 add_executable( ${PROJECT_NAME}_simul ./src/main3.cpp ${SRCS} )
@@ -101,11 +110,11 @@ if(UNITYBUILD)
 endif()
 
 if (MSVC)
-    target_link_libraries( ${PROJECT_NAME}_simul debug nnd optimized cpp_nn )
+    target_link_libraries( ${PROJECT_NAME}_simul debug cpp_nnd optimized cpp_nn )
 elseif(APPLE)
-    target_link_libraries( ${PROJECT_NAME}_simul debug nnd optimized cpp_nn )
+    target_link_libraries( ${PROJECT_NAME}_simul debug cpp_nnd optimized cpp_nn )
 else()
-    target_link_libraries( ${PROJECT_NAME}_simul debug nnd optimized cpp_nn )
+    target_link_libraries( ${PROJECT_NAME}_simul debug cpp_nnd optimized cpp_nn )
 endif()
 
 
