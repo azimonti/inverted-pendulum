@@ -2,7 +2,6 @@
 /*      main1.cpp       */
 /*    Version 1.0       */
 /*     2022/06/12       */
-/*  © Marco Azimonti    */
 /************************/
 
 #include "log/log.h"

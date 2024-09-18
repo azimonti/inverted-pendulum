@@ -5,7 +5,6 @@
 /*     gl_window.h      */
 /*    Version 1.0       */
 /*     2023/04/13       */
-/*  © Marco Azimonti    */
 /************************/
 
 #include <memory>
@@ -13,7 +12,7 @@
 #include <GLFW/glfw3.h>
 #include <glm/mat4x4.hpp>
 #include "camera.h"
-#include "inv_pendulum.h"
+#include "pendulum_cart.h"
 
 namespace ge
 {

@@ -2,7 +2,6 @@
 /*     main3.cpp        */
 /*    Version 1.0       */
 /*     2023/05/12       */
-/*  © Marco Azimonti    */
 /************************/
 
 #include <chrono>
@@ -14,7 +13,7 @@
 #include <signal.h>
 #include "hdf5/hdf5_ext.h"
 #include "log/log.h"
-#include "inv_pendulum.h"
+#include "pendulum_cart.h"
 
 #define F_PI static_cast<float>(3.14159265358979323846)
 

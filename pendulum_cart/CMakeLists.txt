@@ -11,14 +11,7 @@ include( COMPILERCPP        )
 include( FindLIBS           )
 cmake_policy(SET CMP0072 NEW)
 find_package(OpenGL REQUIRED)
-set(CMAKE_CXX_STANDARD 20   )
-    set(UNITYBUILD OFF)
-
-
-
-
-
-
+set(CMAKE_CXX_STANDARD 17   )
 
 if(WIN32)
     generic_libs_find(glew ON      )
@@ -48,7 +41,7 @@ add_definitions( -DLOGGING      )
 add_definitions( -DGLEW_STATIC -DGLM_ENABLE_EXPERIMENTAL )
 
 set( SRCS_GUI ./src/gl_app.cpp ./src/gl_window.cpp )
-set( SRCS ./src/inv_pendulum.cpp ${MA_LIBS_CPP_ROOT}/utils/log/log.cpp )
+set( SRCS ./src/pendulum_cart.cpp ${MA_LIBS_CPP_ROOT}/utils/log/log.cpp )
 
 link_directories(${LIBS_DIR})
 

@@ -1,11 +1,10 @@
-#ifndef _INV_PENDULUM_H_EDB04B0CA39E4B858C4E5689FA4C5563_
-#define _INV_PENDULUM_H_EDB04B0CA39E4B858C4E5689FA4C5563_
+#ifndef _PENDULUM_CART_H_EDB04B0CA39E4B858C4E5689FA4C5563_
+#define _PENDULUM_CART_H_EDB04B0CA39E4B858C4E5689FA4C5563_
 
 /************************/
-/*   inv_pendulum.h     */
+/*   pendulum_cart.h    */
 /*    Version 1.0       */
 /*     2023/04/13       */
-/*  © Marco Azimonti    */
 /************************/
 
 #include <future>

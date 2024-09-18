@@ -2,7 +2,6 @@
 /*     main2.cpp        */
 /*    Version 1.0       */
 /*     2023/04/24       */
-/*  © Marco Azimonti    */
 /************************/
 
 #include <chrono>
@@ -12,7 +11,7 @@
 #include <vector>
 #include <signal.h>
 #include "log/log.h"
-#include "inv_pendulum.h"
+#include "pendulum_cart.h"
 
 // handle SIGNINT
 bool bSignal = false;

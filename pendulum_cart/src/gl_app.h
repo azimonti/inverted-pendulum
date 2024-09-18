@@ -5,7 +5,6 @@
 /*     gl_app.h         */
 /*    Version 2.0       */
 /*     2023/04/13       */
-/*  © Marco Azimonti    */
 /************************/
 
 #include <memory>

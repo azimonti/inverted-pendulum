@@ -1,11 +1,10 @@
-#ifndef _PENDULUM_DATA_H_FC0F6FA76C0549039F3F00F5F07B59A6_
-#define _PENDULUM_DATA_H_FC0F6FA76C0549039F3F00F5F07B59A6_
+#ifndef _PENDULUM_CART_DATA_H_FC0F6FA76C0549039F3F00F5F07B59A6_
+#define _PENDULUM_CART_DATA_H_FC0F6FA76C0549039F3F00F5F07B59A6_
 
 /************************/
-/*   pendulum_data.h    */
+/* pendulum_cart_data.h */
 /*    Version 1.0       */
 /*     2023/04/14       */
-/*  © Marco Azimonti    */
 /************************/
 
 #include <array>

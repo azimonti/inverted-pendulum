@@ -1,8 +1,7 @@
 /************************/
-/*  inv_pendulum.cpp    */
+/*  pendulum_cart.cpp   */
 /*    Version 1.0       */
 /*     2023/04/13       */
-/*  © Marco Azimonti    */
 /************************/
 
 #include <algorithm>
@@ -20,8 +19,8 @@
 #include "log/log.h"
 #include "solvers/runge_kutta.h"
 #include "thread/thread_pool.hpp"
-#include "inv_pendulum.h"
-#include "inv_pendulum_data.h"
+#include "pendulum_cart.h"
+#include "pendulum_cart_data.h"
 
 #define T_C(x)   static_cast<T>(x)
 #define T_PI     static_cast<T>(3.14159265358979323846)

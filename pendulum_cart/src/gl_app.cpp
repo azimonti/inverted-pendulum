@@ -2,7 +2,6 @@
 /*    gl_app.cpp        */
 /*    Version 1.0       */
 /*     2023/04/13       */
-/*  © Marco Azimonti    */
 /************************/
 
 #include <cstdio>
