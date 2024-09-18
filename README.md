@@ -63,10 +63,10 @@ Further update of the submodule can be done with the command:
 
 ![Pendulum](screenshots/pendulum_2d.png)
 
-![Pendulum Cart](Screenshots/pendulum_cart_2d.png)
+![Pendulum Cart](screenshots/pendulum_cart_2d.png)
 
 ## Screenshot 3 dimensional
 
 ![Pendulum](screenshots/pendulum_3d.png)
 
-![Pendulum Cart](Screenshots/pendulum_cart_3d.png)
+![Pendulum Cart](screenshots/pendulum_cart_3d.png)
