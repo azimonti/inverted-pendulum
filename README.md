@@ -73,3 +73,11 @@ Further update of the submodule can be done with the command:
 ![Pendulum](screenshots/pendulum_3d.png)
 
 ![Pendulum Cart](screenshots/pendulum_cart_3d.png)
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Contact
+
+If you have any questions or want to get in touch regarding the project, please open an issue or contact the repository maintainers directly through GitHub.
