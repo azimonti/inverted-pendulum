@@ -1,17 +1,17 @@
 /************************/
 /*     main3.cpp        */
-/*    Version 1.0       */
-/*     2023/05/12       */
+/*    Version 2.0       */
+/*     2025/05/11       */
 /************************/
 
 #include <chrono>
-#include <iostream>
+#include <fstream>
 #include <iomanip>
+#include <iostream>
 #include <string>
 #include <thread>
 #include <vector>
 #include <signal.h>
-#include "hdf5/hdf5_ext.h"
 #include "log/log.h"
 #include "pendulum_cart.h"
 
@@ -25,7 +25,7 @@ namespace ge2
         ss << std::fixed << std::setprecision(decimals) << num;
         return ss.str();
     }
-} // namespace ge
+} // namespace ge2
 
 // handle SIGNINT
 bool bSignal = false;
@@ -78,9 +78,13 @@ int main()
 #else
     const std::string sName = "down_simul";
 #endif
-    h5::H5ppWriter h5("./build/archive/" + sName + ".h5");
+    // HDF5 writer removed
     (void)bVerbose;
     (void)bVVerbose;
+
+    // Set precision for output files
+    const int output_precision = 8;
+
     mInvPendulum.onInit();
     // archive the close-loop simulation
     mInvPendulum.SetFlag(ge::pflags::CONTROL);
@@ -97,13 +101,39 @@ int main()
         vTheta[i]    = vTheta[i] - 2.0f * F_PI * std::floor((std::abs(vTheta[i]) + 0.0001f) / (2.0f * F_PI));
         vThetaDot[i] = mInvPendulum.GetThetaDot();
     }
-    h5.write("simulation/closeloop/time", time);
-    h5.write("simulation/closeloop/x", vX);
-    h5.write("simulation/closeloop/xdot", vXDot);
-    h5.write("simulation/closeloop/theta", vTheta);
-    h5.write("simulation/closeloop/thetadot", vThetaDot);
-    h5.write("simulation/closeloop/kgain", mInvPendulum.GetKGain());
-    h5.write("simulation/closeloop/k", mInvPendulum.GetK());
+
+    // Write closeloop simulation data to text file
+    std::ofstream closeloop_file;
+    std::string closeloop_filename = "./externals/ma-libs/build/" + sName + "_closeloop.txt";
+    closeloop_file.open(closeloop_filename);
+    if (closeloop_file.is_open())
+    {
+        closeloop_file << std::fixed << std::setprecision(output_precision);
+
+        // Write K gain
+        closeloop_file << "K_Gain: " << mInvPendulum.GetKGain() << std::endl;
+
+        // Write K values
+        closeloop_file << "K_Values: ";
+        const auto& k_values_cl = mInvPendulum.GetK();
+        for (size_t k_idx = 0; k_idx < k_values_cl.size(); ++k_idx)
+        {
+            closeloop_file << k_values_cl[k_idx] << (k_idx == k_values_cl.size() - 1 ? "" : ", ");
+        }
+        closeloop_file << std::endl;
+
+        // Write data headers
+        closeloop_file << "time,x,x_dot,theta,theta_dot" << std::endl;
+        // Write data
+        for (size_t i_data = 0; i_data < simSteps; ++i_data)
+        {
+            closeloop_file << time[i_data] << "," << vX[i_data] << "," << vXDot[i_data] << "," << vTheta[i_data] << ","
+                           << vThetaDot[i_data] << std::endl;
+        }
+        closeloop_file.close();
+        LOGGER(logging::INFO) << "Closed-loop simulation data written to " << closeloop_filename;
+    }
+    else { LOGGER(logging::ERROR) << "Failed to open file for writing: " << closeloop_filename; }
 
     // archive the NN simulation
     mInvPendulum.SetFlag(ge::pflags::CONTROL_NN);
@@ -129,14 +159,36 @@ int main()
             vKNN[i]      = mInvPendulum.GetNnK();
         }
 
-        h5.write("simulation/" + std::to_string(i) + "/time", time);
-        h5.write("simulation/" + std::to_string(i) + "/fitness", bestFitness);
-        h5.write("simulation/" + std::to_string(i) + "/x", vX);
-        h5.write("simulation/" + std::to_string(i) + "/xdot", vXDot);
-        h5.write("simulation/" + std::to_string(i) + "/theta", vTheta);
-        h5.write("simulation/" + std::to_string(i) + "/thetadot", vThetaDot);
-        h5.write("simulation/" + std::to_string(i) + "/nnkgain", mInvPendulum.GetNnKGain());
-        h5.write("simulation/" + std::to_string(i) + "/nnk", vKNN);
+        // Write NN simulation data to text file
+        std::ofstream nn_sim_file;
+        std::string nn_sim_filename = "./externals/ma-libs/build/" + sName + "_nn_simul_" + std::to_string(i) + ".txt";
+        nn_sim_file.open(nn_sim_filename);
+        if (nn_sim_file.is_open())
+        {
+            nn_sim_file << std::fixed << std::setprecision(output_precision);
+
+            nn_sim_file << "Fitness: " << bestFitness << std::endl;
+
+            // Write NN K gain
+            nn_sim_file << "NN_K_Gain: " << mInvPendulum.GetNnKGain() << std::endl;
+
+            // Write data headers
+            nn_sim_file << "time,x,x_dot,theta,theta_dot,nnk_c1,nnk_c2,nnk_c3,nnk_c4" << std::endl;
+            // Write data
+            for (size_t i_data = 0; i_data < simSteps; ++i_data)
+            {
+                nn_sim_file << time[i_data] << "," << vX[i_data] << "," << vXDot[i_data] << "," << vTheta[i_data] << ","
+                            << vThetaDot[i_data];
+                for (size_t k_comp = 0; k_comp < vKNN[i_data].size(); ++k_comp)
+                {
+                    nn_sim_file << "," << vKNN[i_data][k_comp];
+                }
+                nn_sim_file << std::endl;
+            }
+            nn_sim_file.close();
+            LOGGER(logging::INFO) << "NN simulation data for iteration " << i << " written to " << nn_sim_filename;
+        }
+        else { LOGGER(logging::ERROR) << "Failed to open file for writing: " << nn_sim_filename; }
 
         std::cout << "best fitness: " << bestFitness << " time: " << ge2::num_to_string(time.back())
                   << " x: " << ge2::num_to_string(vX.back()) << " xdot: " << ge2::num_to_string(vXDot.back())

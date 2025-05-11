@@ -150,8 +150,7 @@ template <typename T> void ge::InvertedPendulum<T>::InitNN()
     mNN = std::make_unique<nn::ANN_MLP_GA<T>>(nnsize, nn::NNParams().seed, nn::NNParams().population_size,
                                               nn::NNParams().top_individuals, nn::TANH);
     mNN->SetName(nn::NNParams().name);
-
-    mNN->SetMixed(nn::NNParams().mixed_population);
+    mNN->SetPopulationStrategy(nn::PopulationStrategy::MIXED_WITH_RANDOM_INJECTION, 0.3);
     mNN->CreatePopulation(nn::NNParams().elitism);
 
     // create save directory if not exists

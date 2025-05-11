@@ -25,7 +25,7 @@ namespace physics
         const T Damping = T_C(0.75);
 #else
         // no damping
-        const T Damping              = T_C(0.0);
+        const T Damping = T_C(0.0);
 #endif
     };
 
