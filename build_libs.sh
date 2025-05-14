@@ -5,33 +5,47 @@ BUILD_TYPE="Release"
 
 # Parse command-line arguments
 while [[ "$#" -gt 0 ]]; do
-    case $1 in
-        -d|--debug) BUILD_TYPE="Debug"; shift ;;
-        -r|--release) BUILD_TYPE="Release"; shift ;;
-        *) echo "Unknown parameter passed: $1"; exit 1 ;;
-    esac
-    shift
+  case $1 in
+    -c|--clean) CLEANBUILD="TRUE"; shift ;;
+    -d|--debug) BUILD_TYPE="Debug"; shift ;;
+    -r|--release) BUILD_TYPE="Release"; shift ;;
+    *) echo "Unknown parameter passed: $1"; exit 1 ;;
+  esac
+  shift
 done
 
 echo "Selected build type: ${BUILD_TYPE}"
+
+if [[ "${CLEANBUILD}" == "TRUE" ]] ; then
+  read -r -p "Are you sure? [y/N] " CLEANCONFIRM
+  case "${CLEANCONFIRM}" in
+    [yY][eE][sS]|[yY])
+      rm -rf  externals/ma-libs/build/
+      echo "externals/ma-libs/build/ clean"
+      exit 0
+      exit 0;;
+    *)
+      exit 0;;
+  esac
+fi
 
 unameOut="$(uname -s)"
 case "${unameOut}" in
   Linux*)   MACHINE=linux;;
   Darwin*)	MACHINE=macos;;
-	CYGWIN*)	MACHINE=cygwin;;
-	MINGW*)		MACHINE=mingw;;
-	*)		MACHINE="UNKNOWN:${unameOut}"
+  CYGWIN*)	MACHINE=cygwin;;
+  MINGW*)		MACHINE=mingw;;
+  *)		MACHINE="UNKNOWN:${unameOut}"
 esac
 
 MACHINE=$(echo "${MACHINE}" | awk '{print tolower($0)}')
 
-cd externals/ma-libs
+cd externals/ma-libs || exit
 ./cbuild.sh --build-type "${BUILD_TYPE}" --cmake-params "-DCPP_LIBNN_BLAS=ON -DCPP_LIBGRAPHIC_ENGINE=ON"
 
-cd ../..
+cd ../.. || exit
 mkdir -p externals/ma-libs/build/inverted_pendulum/"${BUILD_TYPE}"
-cd externals/ma-libs/build/inverted_pendulum
+cd externals/ma-libs/build/inverted_pendulum || exit
 
 if [[ -z "${NPROC}" ]]; then
   if [[ "$(uname -s)" == "Darwin" ]]; then
@@ -42,7 +56,7 @@ if [[ -z "${NPROC}" ]]; then
   (( NPROC = NPROC > 1 ? NPROC - 1 : 1 ))
 fi
 
-cd "${BUILD_TYPE}"
+cd "${BUILD_TYPE}" || exit
 
 if [ "${MACHINE}" == "macos" ]; then
   cmake ../../../../.. -DCMAKE_BUILD_TYPE="${BUILD_TYPE}"
@@ -61,4 +75,4 @@ else
   cmake --build ./ --config "${BUILD_TYPE}" -j "${NPROC}"
 fi
 
-cd ../../..
+cd ../../.. || exit
